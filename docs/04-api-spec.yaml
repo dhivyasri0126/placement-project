@@ -1,0 +1,228 @@
+openapi: 3.1.1
+info:
+  title: CareerPilot API
+  version: 0.1.0
+  description: Machine-readable HTTP API contract for CareerPilot. This document is
+    the API source of truth. The initial compatibility baseline documents the existing
+    authentication endpoints without silently changing their paths, role names, or
+    successful response shapes. New domain resources are added only after their contracts
+    are approved. Target future resource APIs use /api/v1, while the existing /api/auth/*
+    endpoints remain compatibility-sensitive until a deliberate migration is approved.
+  license:
+    name: Proprietary
+servers:
+- url: /
+  description: Relative API base URL; environment supplies the host.
+tags:
+- name: Authentication
+  description: Existing authentication compatibility contract.
+- name: Test
+  description: Temporary development verification endpoint.
+paths:
+  /api/auth/register:
+    post:
+      tags:
+      - Authentication
+      summary: Register a student
+      description: Existing compatibility endpoint. The current implementation creates
+        a student account and returns a plain-text success message. Do not change
+        the path, request field names, or successful response media type without an
+        explicit migration.
+      operationId: registerStudent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              student:
+                summary: Student registration
+                value:
+                  name: Student Name
+                  email: student@example.com
+                  password: password
+      responses:
+        '200':
+          description: Student registered successfully.
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Student registered successfully
+        '400':
+          description: Validation failure or invalid request. Exact current error
+            body is implementation-defined until the error contract is migrated.
+        '409':
+          description: Email already exists, if mapped to conflict by the implementation.
+  /api/auth/login:
+    post:
+      tags:
+      - Authentication
+      summary: Authenticate a user
+      description: Existing compatibility endpoint. Successful responses contain token,
+        email, and role. The current role values are STUDENT, STAFF, and SUPER_ADMIN.
+        The response shape must not be changed silently.
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              student:
+                summary: Student login
+                value:
+                  email: student@example.com
+                  password: password
+      responses:
+        '200':
+          description: Authentication succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              examples:
+                student:
+                  value:
+                    token: eyJhbGciOi...
+                    email: student@example.com
+                    role: STUDENT
+        '401':
+          description: Authentication failed.
+  /api/test/protected:
+    get:
+      tags:
+      - Test
+      summary: Verify protected access
+      description: Temporary development endpoint used to verify authenticated access.
+        It is not part of the product API and must be removed or deliberately reclassified
+        before production.
+      operationId: protectedTest
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Authenticated request accepted.
+          content:
+            text/plain:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+        '403':
+          description: Authenticated user is not permitted.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer access token. The existing compatibility implementation
+        uses JWT. Token lifecycle, claims, rotation, revocation, and refresh strategy
+        are defined in the security specification.
+  schemas:
+    RegisterRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - email
+      - password
+      properties:
+        name:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+          writeOnly: true
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+          writeOnly: true
+    AuthResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - token
+      - email
+      - role
+      properties:
+        token:
+          type: string
+          description: Existing JWT access token.
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum:
+          - STUDENT
+          - STAFF
+          - SUPER_ADMIN
+    ProblemDetails:
+      type: object
+      description: Target standard error representation for new/modernized APIs, based
+        on RFC 9457. It is not declared as the current error representation of the
+        legacy authentication endpoints until implementation is migrated.
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri-reference
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 100
+          maximum: 599
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri-reference
+x-careerpilot:
+  documentId: CP-DOC-04
+  status: baseline
+  contractPolicy:
+    existingCompatibilityEndpoints:
+    - /api/auth/register
+    - /api/auth/login
+    - /api/test/protected
+    futureResourceBasePath: /api/v1
+    futureResourceStyle: noun-oriented resources with explicit authorization
+    legacyMigration: No silent path or response-shape changes.
+  plannedResourceAreas:
+  - student-profile
+  - companies
+  - resumes
+  - skill-gap
+  - learning
+  - interviews
+  - progress
+  - staff
+  - reports
+  - super-admin
+  standards:
+    openapi: 3.1.1
+    problemDetails: RFC 9457
+    bearerToken: RFC 6750
+    jwtBestPractices: RFC 8725
