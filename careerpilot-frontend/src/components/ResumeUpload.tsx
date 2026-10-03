@@ -1,41 +1,47 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { apiClient } from '../api/client';
+import { resumeUploadSchema, type ResumeUploadFormValues } from '../validations';
+import { FormField } from './ui/FormField';
+import { UploadCloud, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface ResumeUploadProps {
-  onUploadSuccess?: (resumeData: any) => void;
+  onUploadSuccess?: (resumeData: unknown) => void;
 }
 
 export const ResumeUpload: React.FC<ResumeUploadProps> = ({ onUploadSuccess }) => {
-  const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ResumeUploadFormValues>({
+    resolver: zodResolver(resumeUploadSchema),
+    mode: 'onChange',
+  });
+
+  const { onChange: formOnChange, ...restFileProps } = register('file');
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    formOnChange(e);
     if (e.target.files && e.target.files[0]) {
-      const selected = e.target.files[0];
-      if (selected.type !== 'application/pdf') {
-        setError('Only PDF resume files are allowed.');
-        setFile(null);
-        return;
-      }
-      if (selected.size > 5 * 1024 * 1024) {
-        setError('File size must be under 5MB.');
-        setFile(null);
-        return;
-      }
-      setError(null);
-      setFile(selected);
+      setSelectedFile(e.target.files[0]);
+    } else {
+      setSelectedFile(null);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!file) return;
-
-    setUploading(true);
-    setError(null);
+  const onSubmit = async (data: ResumeUploadFormValues) => {
+    setServerError(null);
     setSuccessMsg(null);
+
+    const file = data.file instanceof FileList ? data.file[0] : (data.file as unknown as File);
+    if (!file) return;
 
     const formData = new FormData();
     formData.append('file', file);
@@ -44,46 +50,145 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ onUploadSuccess }) =
       const response = await apiClient.post('/resumes', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setSuccessMsg('Resume uploaded successfully and plain text extracted!');
+      setSuccessMsg(`Resume "${file.name}" uploaded successfully and plain text extracted!`);
+      reset();
+      setSelectedFile(null);
       if (onUploadSuccess) {
         onUploadSuccess(response.data);
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to upload PDF resume.');
-    } finally {
-      setUploading(false);
+    } catch (err: unknown) {
+      const apiErr = err as { response?: { data?: { message?: string } } };
+      setServerError(apiErr.response?.data?.message || 'Failed to upload PDF resume. Please try again.');
     }
   };
 
   return (
-    <div style={{ padding: '1.5rem', border: '1px dashed var(--cp-border-default)', borderRadius: 'var(--cp-radius-md)', textAlign: 'center' }}>
-      <h3>Upload PDF Resume</h3>
-      {error && <div style={{ color: 'var(--cp-color-danger-base)', marginBottom: '1rem' }}>{error}</div>}
-      {successMsg && <div style={{ color: 'var(--cp-color-success-base)', marginBottom: '1rem' }}>{successMsg}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={handleFileChange}
-          style={{ marginBottom: '1rem', display: 'block', margin: '0 auto 1rem auto' }}
-        />
-        <button
-          type="submit"
-          disabled={!file || uploading}
+    <div
+      style={{
+        padding: '1.75rem',
+        border: '1px dashed var(--surface-divider, #CBD5E1)',
+        borderRadius: 'var(--radius-lg, 8px)',
+        backgroundColor: 'var(--color-neutral-50, #FAFAFA)',
+        textAlign: 'center',
+      }}
+    >
+      <div
+        style={{
+          width: '44px',
+          height: '44px',
+          borderRadius: '50%',
+          backgroundColor: 'var(--color-primary-50, #EEF4FF)',
+          color: 'var(--color-primary-600, #1D4ED8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 0.75rem auto',
+        }}
+      >
+        <UploadCloud size={24} />
+      </div>
+
+      <h3 style={{ fontSize: '1.125rem', fontWeight: 600, margin: '0 0 0.25rem 0', color: 'var(--color-neutral-900, #18181B)' }}>
+        Upload PDF Resume
+      </h3>
+      <p style={{ margin: '0 0 1.25rem 0', color: 'var(--color-neutral-500, #71717A)', fontSize: '0.8125rem' }}>
+        Supported format: PDF only. Maximum size: 5MB.
+      </p>
+
+      {serverError && (
+        <div
+          role="alert"
           style={{
-            padding: '0.5rem 1.5rem',
-            background: 'var(--cp-color-primary-base)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 'var(--cp-radius-sm)',
-            cursor: file && !uploading ? 'pointer' : 'not-allowed',
-            opacity: file && !uploading ? 1 : 0.6,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            color: 'var(--color-danger-700, #B91C1C)',
+            backgroundColor: 'var(--color-danger-50, #FEF2F2)',
+            border: '1px solid var(--color-danger-100, #FEE2E2)',
+            padding: '0.625rem 1rem',
+            borderRadius: 'var(--radius-md, 6px)',
+            marginBottom: '1rem',
+            fontSize: '0.8125rem',
           }}
         >
-          {uploading ? 'Uploading & Parsing...' : 'Upload Resume'}
+          <AlertCircle size={16} />
+          <span>{serverError}</span>
+        </div>
+      )}
+
+      {successMsg && (
+        <div
+          role="status"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            color: 'var(--color-success-700, #047857)',
+            backgroundColor: 'var(--color-success-50, #ECFDF5)',
+            border: '1px solid var(--color-success-100, #D1FAE5)',
+            padding: '0.625rem 1rem',
+            borderRadius: 'var(--radius-md, 6px)',
+            marginBottom: '1rem',
+            fontSize: '0.8125rem',
+          }}
+        >
+          <CheckCircle2 size={16} />
+          <span>{successMsg}</span>
+        </div>
+      )}
+
+      {/* noValidate disables browser native popups, guaranteeing inline Zod validation with zero native required attribute */}
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <FormField
+          htmlFor="resume-file-input"
+          error={errors.file?.message}
+          style={{ marginBottom: '1rem', alignItems: 'center' }}
+        >
+          <input
+            id="resume-file-input"
+            type="file"
+            accept="application/pdf,.pdf"
+            aria-invalid={errors.file ? 'true' : undefined}
+            onChange={handleFileChange}
+            style={{
+              display: 'block',
+              margin: '0 auto',
+              fontSize: '0.875rem',
+              color: 'var(--color-neutral-700, #3F3F46)',
+            }}
+            {...restFileProps}
+          />
+        </FormField>
+
+        {selectedFile && (
+          <p style={{ fontSize: '0.75rem', color: 'var(--color-neutral-600, #52525B)', margin: '0 0 1rem 0' }}>
+            Selected: <strong>{selectedFile.name}</strong> ({(selectedFile.size / 1024).toFixed(1)} KB)
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          style={{
+            padding: '0.625rem 1.5rem',
+            backgroundColor: isSubmitting
+              ? 'var(--btn-primary-disabled-bg, #D9E6FF)'
+              : 'var(--btn-primary-bg, #2563EB)',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: 'var(--radius-md, 6px)',
+            fontWeight: 600,
+            fontSize: '0.875rem',
+            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            transition: 'background-color 0.15s ease-in-out',
+          }}
+        >
+          {isSubmitting ? 'Uploading & Parsing...' : 'Upload Resume'}
         </button>
       </form>
     </div>
   );
 };
+

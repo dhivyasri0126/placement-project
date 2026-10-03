@@ -1,126 +1,355 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { apiClient } from '../api/client';
+import { profileSchema, type ProfileFormValues } from '../validations';
+import { FormField, Input, Select, Textarea } from '../components/ui/FormField';
 
 interface Company {
   id: number;
   name: string;
 }
 
-interface StudentProfile {
+interface StudentProfileResponse {
   id: number;
   name: string;
   email: string;
-  college: string;
-  department: string;
-  cgpa: number;
-  graduationYear: number;
-  phone: string;
-  bio: string;
-  targetCompanyId: number | null;
-  targetCompanyName: string | null;
+  college?: string;
+  department?: string;
+  cgpa?: number;
+  graduationYear?: number;
+  phone?: string;
+  bio?: string;
+  targetCompanyId?: number | null;
+  targetCompanyName?: string | null;
 }
 
 export const ProfilePage: React.FC = () => {
-  const [profile, setProfile] = useState<StudentProfile | null>(null);
+  const [profile, setProfile] = useState<StudentProfileResponse | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ text: string; isError?: boolean } | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isDirty },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    mode: 'onTouched',
+    defaultValues: {
+      targetCompanyId: '',
+      college: '',
+      department: '',
+      cgpa: '',
+      graduationYear: '',
+      phone: '',
+      bio: '',
+    },
+  });
 
   useEffect(() => {
+    let ignore = false;
+
     const fetchData = async () => {
       try {
         const [profileRes, companiesRes] = await Promise.all([
           apiClient.get('/students/me'),
           apiClient.get('/companies'),
         ]);
-        setProfile(profileRes.data);
-        setCompanies(companiesRes.data);
+
+        if (!ignore) {
+          const p = profileRes.data;
+          setProfile(p);
+          setCompanies(companiesRes.data || []);
+
+          reset({
+            targetCompanyId: p.targetCompanyId ? String(p.targetCompanyId) : '',
+            college: p.college ?? '',
+            department: p.department ?? '',
+            cgpa: p.cgpa !== null && p.cgpa !== undefined ? String(p.cgpa) : '',
+            graduationYear: p.graduationYear ? String(p.graduationYear) : '',
+            phone: p.phone ?? '',
+            bio: p.bio ?? '',
+          });
+        }
       } catch (err) {
-        console.error('Failed to load profile data', err);
+        if (!ignore) {
+          console.error('Failed to load profile data', err);
+          setMessage({ text: 'Failed to load profile information.', isError: true });
+        }
       } finally {
-        setLoading(false);
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
-    fetchData();
-  }, []);
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile) return;
-    setSaving(true);
+    fetchData();
+    return () => {
+      ignore = true;
+    };
+  }, [reset]);
+
+  const onSubmit = async (data: ProfileFormValues) => {
     setMessage(null);
 
     try {
-      const res = await apiClient.put('/students/me', profile);
+      const payload = {
+        college: data.college?.trim() || null,
+        department: data.department?.trim() || null,
+        cgpa: data.cgpa?.trim() ? parseFloat(data.cgpa) : null,
+        graduationYear: data.graduationYear?.trim() ? parseInt(data.graduationYear, 10) : null,
+        phone: data.phone?.trim() || null,
+        bio: data.bio?.trim() || null,
+        targetCompanyId: data.targetCompanyId ? Number(data.targetCompanyId) : null,
+      };
+
+      const res = await apiClient.put('/students/me', payload);
       setProfile(res.data);
-      setMessage('Profile updated successfully!');
-    } catch (_err) {
-      setMessage('Failed to update profile.');
-    } finally {
-      setSaving(false);
+      reset({
+        targetCompanyId: res.data.targetCompanyId ? String(res.data.targetCompanyId) : '',
+        college: res.data.college ?? '',
+        department: res.data.department ?? '',
+        cgpa: res.data.cgpa !== null && res.data.cgpa !== undefined ? String(res.data.cgpa) : '',
+        graduationYear: res.data.graduationYear ? String(res.data.graduationYear) : '',
+        phone: res.data.phone ?? '',
+        bio: res.data.bio ?? '',
+      });
+      setMessage({ text: 'Profile updated successfully!' });
+    } catch (err: unknown) {
+      const apiErr = err as { response?: { data?: { message?: string } } };
+      setMessage({
+        text: apiErr.response?.data?.message || 'Failed to update profile.',
+        isError: true,
+      });
     }
   };
 
-  if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading student profile...</div>;
+  if (loading) {
+    return (
+      <div style={{ maxWidth: '640px', margin: '4rem auto', padding: '2rem', textAlign: 'center' }}>
+        <p style={{ color: 'var(--color-neutral-600, #52525B)' }}>Loading student profile...</p>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ maxWidth: '600px', margin: '2rem auto', padding: '2rem', border: '1px solid var(--cp-border-default)', borderRadius: 'var(--cp-radius-md)' }}>
-      <h2>Student Profile & Target Company</h2>
-      {message && <div style={{ padding: '0.75rem', marginBottom: '1rem', background: 'var(--cp-color-success-subtle)', borderRadius: 'var(--cp-radius-sm)' }}>{message}</div>}
-      <form onSubmit={handleSave}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Full Name</label>
-          <input type="text" value={profile?.name || ''} disabled style={{ width: '100%', padding: '0.5rem', opacity: 0.7 }} />
+    <div
+      style={{
+        maxWidth: '640px',
+        margin: '2rem auto 4rem auto',
+        padding: '2rem',
+        backgroundColor: 'var(--surface-card, #FFFFFF)',
+        border: '1px solid var(--surface-divider, #E5E7EB)',
+        borderRadius: 'var(--radius-lg, 8px)',
+        boxShadow: 'var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05))',
+      }}
+    >
+      <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--surface-divider, #E5E7EB)', paddingBottom: '1rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'var(--color-neutral-900, #18181B)' }}>
+          Student Profile & Target Company
+        </h1>
+        <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: 'var(--color-neutral-600, #52525B)' }}>
+          Manage your academic background and target company for tailored preparation roadmap.
+        </p>
+      </div>
+
+      {message && (
+        <div
+          role="alert"
+          style={{
+            padding: '0.75rem 1rem',
+            marginBottom: '1.5rem',
+            borderRadius: 'var(--radius-md, 6px)',
+            fontSize: '0.875rem',
+            backgroundColor: message.isError
+              ? 'var(--color-danger-50, #FEF2F2)'
+              : 'var(--color-success-50, #ECFDF5)',
+            border: `1px solid ${
+              message.isError
+                ? 'var(--color-danger-100, #FEE2E2)'
+                : 'var(--color-success-100, #D1FAE5)'
+            }`,
+            color: message.isError
+              ? 'var(--color-danger-700, #B91C1C)'
+              : 'var(--color-success-700, #047857)',
+          }}
+        >
+          {message.text}
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Email Address</label>
-          <input type="email" value={profile?.email || ''} disabled style={{ width: '100%', padding: '0.5rem', opacity: 0.7 }} />
+      )}
+
+      {/* Read-Only Account Identity Info */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gap: '1rem',
+          marginBottom: '1.5rem',
+          padding: '1rem',
+          backgroundColor: 'var(--color-neutral-50, #FAFAFA)',
+          borderRadius: 'var(--radius-md, 6px)',
+          border: '1px solid var(--surface-divider, #E5E7EB)',
+        }}
+      >
+        <div>
+          <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600, color: 'var(--color-neutral-500, #71717A)' }}>
+            Full Name
+          </span>
+          <p style={{ margin: '0.25rem 0 0 0', fontWeight: 600, color: 'var(--color-neutral-800, #27272A)' }}>
+            {profile?.name || '—'}
+          </p>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Target Company</label>
-          <select
-            value={profile?.targetCompanyId || ''}
-            onChange={(e) => setProfile(prev => prev ? { ...prev, targetCompanyId: Number(e.target.value) || null } : null)}
-            style={{ width: '100%', padding: '0.5rem' }}
+        <div>
+          <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600, color: 'var(--color-neutral-500, #71717A)' }}>
+            Email Address
+          </span>
+          <p style={{ margin: '0.25rem 0 0 0', fontWeight: 600, color: 'var(--color-neutral-800, #27272A)' }}>
+            {profile?.email || '—'}
+          </p>
+        </div>
+      </div>
+
+      {/* Editable Form with Zod + React Hook Form (noValidate disables browser popups, zero native required) */}
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <FormField
+          label="Target Company"
+          htmlFor="profile-target-company"
+          error={errors.targetCompanyId?.message}
+          helperText="Select the company you are actively preparing for"
+        >
+          <Select
+            id="profile-target-company"
+            hasError={!!errors.targetCompanyId}
+            {...register('targetCompanyId')}
           >
-            <option value="">-- Select Target Company --</option>
-            {companies.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+            <option value="">-- No target selected --</option>
+            {companies.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
-          </select>
+          </Select>
+        </FormField>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+          <FormField
+            label="College / Institution"
+            htmlFor="profile-college"
+            error={errors.college?.message}
+          >
+            <Input
+              id="profile-college"
+              type="text"
+              placeholder="e.g. National Institute of Technology"
+              hasError={!!errors.college}
+              {...register('college')}
+            />
+          </FormField>
+
+          <FormField
+            label="Department / Stream"
+            htmlFor="profile-dept"
+            error={errors.department?.message}
+          >
+            <Input
+              id="profile-dept"
+              type="text"
+              placeholder="e.g. Computer Science and Engineering"
+              hasError={!!errors.department}
+              {...register('department')}
+            />
+          </FormField>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>College / Institution</label>
-          <input
-            type="text"
-            value={profile?.college || ''}
-            onChange={(e) => setProfile(prev => prev ? { ...prev, college: e.target.value } : null)}
-            style={{ width: '100%', padding: '0.5rem' }}
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem' }}>
+          <FormField
+            label="CGPA (out of 10.0)"
+            htmlFor="profile-cgpa"
+            error={errors.cgpa?.message}
+          >
+            <Input
+              id="profile-cgpa"
+              type="number"
+              step="0.01"
+              min="0"
+              max="10"
+              placeholder="e.g. 8.75"
+              hasError={!!errors.cgpa}
+              {...register('cgpa')}
+            />
+          </FormField>
+
+          <FormField
+            label="Graduation Year"
+            htmlFor="profile-grad-year"
+            error={errors.graduationYear?.message}
+          >
+            <Input
+              id="profile-grad-year"
+              type="number"
+              step="1"
+              placeholder="e.g. 2026"
+              hasError={!!errors.graduationYear}
+              {...register('graduationYear')}
+            />
+          </FormField>
+
+          <FormField
+            label="Contact Phone"
+            htmlFor="profile-phone"
+            error={errors.phone?.message}
+          >
+            <Input
+              id="profile-phone"
+              type="tel"
+              placeholder="e.g. +91 9876543210"
+              hasError={!!errors.phone}
+              {...register('phone')}
+            />
+          </FormField>
+        </div>
+
+        <FormField
+          label="Bio & Career Goals"
+          htmlFor="profile-bio"
+          error={errors.bio?.message}
+          helperText="Brief summary of your career focus and placement aspirations"
+        >
+          <Textarea
+            id="profile-bio"
+            rows={4}
+            placeholder="e.g. Aspiring full-stack engineer targeting product-based companies..."
+            hasError={!!errors.bio}
+            {...register('bio')}
           />
-        </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Department / Stream</label>
-          <input
-            type="text"
-            value={profile?.department || ''}
-            onChange={(e) => setProfile(prev => prev ? { ...prev, department: e.target.value } : null)}
-            style={{ width: '100%', padding: '0.5rem' }}
-          />
-        </div>
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label>Bio / Objectives</label>
-          <textarea
-            value={profile?.bio || ''}
-            onChange={(e) => setProfile(prev => prev ? { ...prev, bio: e.target.value } : null)}
-            rows={3}
-            style={{ width: '100%', padding: '0.5rem' }}
-          />
-        </div>
-        <button type="submit" disabled={saving} style={{ width: '100%', padding: '0.75rem', background: 'var(--cp-color-primary-base)', color: '#fff', border: 'none', cursor: 'pointer' }}>
-          {saving ? 'Saving...' : 'Save Profile'}
+        </FormField>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          style={{
+            width: '100%',
+            padding: '0.75rem 1.25rem',
+            backgroundColor: isSubmitting
+              ? 'var(--btn-primary-disabled-bg, #D9E6FF)'
+              : 'var(--btn-primary-bg, #2563EB)',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: 'var(--radius-md, 6px)',
+            fontWeight: 600,
+            fontSize: '0.875rem',
+            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            transition: 'background-color 0.15s ease-in-out',
+            marginTop: '0.5rem',
+          }}
+        >
+          {isSubmitting ? 'Saving Profile...' : isDirty ? 'Save Changes' : 'Profile Saved'}
         </button>
       </form>
     </div>
   );
 };
+
