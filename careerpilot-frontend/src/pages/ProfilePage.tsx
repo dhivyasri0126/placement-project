@@ -55,7 +55,7 @@ export const ProfilePage: React.FC = () => {
       const res = await apiClient.put('/students/me', profile);
       setProfile(res.data);
       setMessage('Profile updated successfully!');
-    } catch (err) {
+    } catch (_err) {
       setMessage('Failed to update profile.');
     } finally {
       setSaving(false);

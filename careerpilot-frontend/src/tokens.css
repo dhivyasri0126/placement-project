@@ -56,6 +56,18 @@
   --color-neutral-800: #27272A;
   --color-neutral-900: #18181B;
 
+  /* Convenience & Legacy Aliases */
+  --cp-border-default: var(--surface-divider, #E5E7EB);
+  --cp-color-primary-base: var(--color-primary-500, #2563EB);
+  --cp-color-primary-hover: var(--color-primary-600, #1D4ED8);
+  --cp-color-success-base: var(--color-success-500, #10B981);
+  --cp-color-success-subtle: var(--color-success-50, #ECFDF5);
+  --cp-color-danger-base: var(--color-danger-500, #EF4444);
+  --cp-color-danger-subtle: var(--color-danger-50, #FEF2F2);
+  --cp-radius-sm: var(--radius-sm, 4px);
+  --cp-radius-md: var(--radius-md, 6px);
+  --cp-radius-lg: var(--radius-lg, 8px);
+
   /* ==========================================================================
      2. UI SURFACE TOKENS
      ========================================================================== */
