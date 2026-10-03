@@ -1,0 +1,223 @@
+/**
+ * CareerPilot Design System Tokens
+ * Version 1.0 (WCAG 2.2 AA Compliant)
+ * Source: AI Placement Support Agent Design Tokens Specification
+ */
+
+:root {
+  /* ==========================================================================
+     1. COLOR TOKENS
+     ========================================================================== */
+
+  /* Primary Palette */
+  --color-primary-50: #EEF4FF;
+  --color-primary-100: #D9E6FF;
+  --color-primary-500: #2563EB;
+  --color-primary-600: #1D4ED8;
+  --color-primary-700: #1E40AF;
+
+  /* Secondary Palette */
+  --color-secondary-50: #F1F5F9;
+  --color-secondary-100: #E2E8F0;
+  --color-secondary-500: #475569;
+  --color-secondary-600: #334155;
+  --color-secondary-700: #1E293B;
+
+  /* Success Palette */
+  --color-success-50: #ECFDF5;
+  --color-success-100: #D1FAE5;
+  --color-success-500: #10B981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+
+  /* Warning Palette */
+  --color-warning-50: #FFFBEB;
+  --color-warning-100: #FEF3C7;
+  --color-warning-500: #F59E0B;
+  --color-warning-600: #D97706;
+  --color-warning-700: #B45309;
+
+  /* Danger Palette */
+  --color-danger-50: #FEF2F2;
+  --color-danger-100: #FEE2E2;
+  --color-danger-500: #EF4444;
+  --color-danger-600: #DC2626;
+  --color-danger-700: #B91C1C;
+
+  /* Neutral Palette */
+  --color-neutral-50: #FAFAFA;
+  --color-neutral-100: #F4F4F5;
+  --color-neutral-200: #E4E4E7;
+  --color-neutral-300: #D4D4D8;
+  --color-neutral-400: #A1A1AA;
+  --color-neutral-500: #71717A;
+  --color-neutral-600: #52525B;
+  --color-neutral-700: #3F3F46;
+  --color-neutral-800: #27272A;
+  --color-neutral-900: #18181B;
+
+  /* ==========================================================================
+     2. UI SURFACE TOKENS
+     ========================================================================== */
+
+  --surface-app-bg: #F8FAFC;
+  --surface-main: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --surface-sidebar: #F1F5F9;
+  --surface-hover: #E2E8F0;
+  --surface-divider: #E5E7EB;
+
+  /* ==========================================================================
+     3. TYPOGRAPHY TOKENS
+     ========================================================================== */
+
+  /* Font Families */
+  --font-family-sans: Inter, system-ui, sans-serif;
+  --font-family-mono: "JetBrains Mono", monospace;
+  --font-family-fallback: ui-sans-serif, system-ui;
+
+  /* Display */
+  --font-display-size: 56px;
+  --font-display-weight: 700;
+  --font-display-line-height: 64px;
+
+  /* H1 */
+  --font-h1-size: 40px;
+  --font-h1-weight: 700;
+  --font-h1-line-height: 48px;
+
+  /* H2 */
+  --font-h2-size: 32px;
+  --font-h2-weight: 700;
+  --font-h2-line-height: 40px;
+
+  /* H3 */
+  --font-h3-size: 24px;
+  --font-h3-weight: 600;
+  --font-h3-line-height: 32px;
+
+  /* H4 */
+  --font-h4-size: 20px;
+  --font-h4-weight: 600;
+  --font-h4-line-height: 28px;
+
+  /* H5 */
+  --font-h5-size: 18px;
+  --font-h5-weight: 600;
+  --font-h5-line-height: 26px;
+
+  /* Body Large */
+  --font-body-lg-size: 16px;
+  --font-body-lg-weight: 500;
+  --font-body-lg-line-height: 24px;
+
+  /* Body Medium */
+  --font-body-md-size: 14px;
+  --font-body-md-weight: 500;
+  --font-body-md-line-height: 20px;
+
+  /* Body Small */
+  --font-body-sm-size: 12px;
+  --font-body-sm-weight: 500;
+  --font-body-sm-line-height: 18px;
+
+  /* Caption */
+  --font-caption-size: 12px;
+  --font-caption-weight: 400;
+  --font-caption-line-height: 16px;
+
+  /* Overline */
+  --font-overline-size: 11px;
+  --font-overline-weight: 500;
+  --font-overline-line-height: 16px;
+
+  /* ==========================================================================
+     4. SPACING TOKENS (Base Unit: 4px)
+     ========================================================================== */
+
+  --space-4: 4px;      /* 0.25rem */
+  --space-8: 8px;      /* 0.5rem */
+  --space-12: 12px;    /* 0.75rem */
+  --space-16: 16px;    /* 1rem */
+  --space-24: 24px;    /* 1.5rem */
+  --space-32: 32px;    /* 2rem */
+  --space-48: 48px;    /* 3rem */
+  --space-64: 64px;    /* 4rem */
+  --space-96: 96px;    /* 6rem */
+
+  /* ==========================================================================
+     5. BORDER RADIUS TOKENS
+     ========================================================================== */
+
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 999px;
+
+  /* ==========================================================================
+     6. SHADOW TOKENS (Elevation System)
+     ========================================================================== */
+
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+
+  /* ==========================================================================
+     7. CHART COLOR TOKENS
+     ========================================================================== */
+
+  --chart-color-1: #2563EB;
+  --chart-color-2: #0EA5E9;
+  --chart-color-3: #10B981;
+  --chart-color-4: #F59E0B;
+  --chart-color-5: #64748B;
+  --chart-color-6: #94A3B8;
+
+  /* ==========================================================================
+     8. COMPONENT SPECIFIC TOKENS
+     ========================================================================== */
+
+  /* Button Tokens */
+  --btn-primary-bg: var(--color-primary-500);
+  --btn-primary-hover-bg: var(--color-primary-600);
+  --btn-primary-active-bg: var(--color-primary-700);
+  --btn-primary-disabled-bg: var(--color-primary-100);
+
+  --btn-secondary-bg: var(--color-secondary-500);
+  --btn-secondary-hover-bg: var(--color-secondary-600);
+  --btn-secondary-active-bg: var(--color-secondary-700);
+  --btn-secondary-disabled-bg: var(--color-secondary-100);
+
+  --btn-success-bg: var(--color-success-500);
+  --btn-success-hover-bg: var(--color-success-600);
+  --btn-success-active-bg: var(--color-success-700);
+  --btn-success-disabled-bg: var(--color-success-100);
+
+  --btn-warning-bg: var(--color-warning-500);
+  --btn-warning-hover-bg: var(--color-warning-600);
+  --btn-warning-active-bg: var(--color-warning-700);
+  --btn-warning-disabled-bg: var(--color-warning-100);
+
+  --btn-danger-bg: var(--color-danger-500);
+  --btn-danger-hover-bg: var(--color-danger-600);
+  --btn-danger-active-bg: var(--color-danger-700);
+  --btn-danger-disabled-bg: var(--color-danger-100);
+
+  /* Input Tokens */
+  --input-border-default: var(--color-secondary-100);
+  --input-border-hover: var(--color-neutral-400);
+  --input-border-focus: var(--color-primary-500);
+  --input-border-error: var(--color-danger-500);
+  --input-bg-disabled: var(--color-neutral-100);
+
+  /* Icon Tokens */
+  --icon-stroke-width: 2px;
+  --icon-size-md: 24px;
+}
