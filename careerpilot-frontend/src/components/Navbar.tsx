@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { GraduationCap, LogOut, User, LayoutDashboard, Palette } from 'lucide-react';
+import { GraduationCap, LogOut, User, LayoutDashboard, Palette, FileText, Home } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
@@ -35,7 +35,7 @@ export const Navbar: React.FC = () => {
       >
         {/* Brand */}
         <Link
-          to={isAuthenticated ? '/dashboard' : '/'}
+          to="/"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -46,7 +46,7 @@ export const Navbar: React.FC = () => {
         >
           <div
             style={{
-              backgroundColor: 'var(--color-primary-500, #2563EB)',
+              backgroundColor: '#00B2DA',
               color: '#FFFFFF',
               width: '36px',
               height: '36px',
@@ -63,13 +63,33 @@ export const Navbar: React.FC = () => {
               CareerPilot
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--color-neutral-500, #71717A)', lineHeight: 1 }}>
-              AI Placement Platform
+              Placement Preparation
             </div>
           </div>
         </Link>
 
         {/* Center Nav Links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {!isAuthenticated && (
+            <Link
+              to="/"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                color: 'var(--color-neutral-700, #3F3F46)',
+                textDecoration: 'none',
+                padding: '0.375rem 0.75rem',
+                borderRadius: 'var(--radius-md, 6px)',
+              }}
+            >
+              <Home size={16} />
+              Home
+            </Link>
+          )}
+
           {isAuthenticated && (
             <>
               <Link
@@ -88,6 +108,23 @@ export const Navbar: React.FC = () => {
               >
                 <LayoutDashboard size={16} />
                 Dashboard
+              </Link>
+              <Link
+                to="/resume-analysis"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  color: 'var(--color-neutral-700, #3F3F46)',
+                  textDecoration: 'none',
+                  padding: '0.375rem 0.75rem',
+                  borderRadius: 'var(--radius-md, 6px)',
+                }}
+              >
+                <FileText size={16} />
+                Resume Analysis
               </Link>
               <Link
                 to="/profile"

@@ -293,11 +293,39 @@ export const DashboardPage: React.FC = () => {
                 <div style={{ fontSize: '0.75rem', color: 'var(--color-neutral-500, #71717A)', marginTop: '0.25rem' }}>
                   File size: {(latestResume.fileSize / 1024).toFixed(1)} KB
                 </div>
+                <Link
+                  to="/resume-analysis"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                    fontSize: '0.8125rem',
+                    color: 'var(--color-primary-600, #1D4ED8)',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    marginTop: '0.75rem',
+                  }}
+                >
+                  View Full Resume Analysis & Score →
+                </Link>
               </div>
             ) : (
-              <p style={{ color: 'var(--color-neutral-600, #52525B)', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                Upload your latest PDF resume to begin extraction and skill evaluation.
-              </p>
+              <div style={{ marginBottom: '1rem' }}>
+                <p style={{ color: 'var(--color-neutral-600, #52525B)', fontSize: '0.875rem', margin: '0 0 0.5rem 0' }}>
+                  Upload your latest PDF resume to begin extraction and skill evaluation.
+                </p>
+                <Link
+                  to="/resume-analysis"
+                  style={{
+                    fontSize: '0.8125rem',
+                    color: 'var(--color-primary-600, #1D4ED8)',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                  }}
+                >
+                  Preview Resume Analysis →
+                </Link>
+              </div>
             )}
           </div>
 
