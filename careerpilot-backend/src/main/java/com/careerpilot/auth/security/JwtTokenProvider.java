@@ -35,6 +35,14 @@ public class JwtTokenProvider {
         this.jwtRefreshExpirationMs = jwtRefreshExpirationMs;
     }
 
+    public long getJwtExpirationMs() {
+        return jwtExpirationMs;
+    }
+
+    public long getJwtRefreshExpirationMs() {
+        return jwtRefreshExpirationMs;
+    }
+
     public String generateAccessToken(Authentication authentication, Long userId) {
         String username = authentication.getName();
         List<String> roles = authentication.getAuthorities().stream()

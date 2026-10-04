@@ -60,6 +60,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .expiresIn(tokenProvider.getJwtExpirationMs())
                 .userId(savedUser.getId())
                 .email(savedUser.getEmail())
                 .name(savedUser.getName())
@@ -82,6 +83,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .expiresIn(tokenProvider.getJwtExpirationMs())
                 .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
@@ -91,11 +93,16 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public AuthResponse refreshToken(RefreshTokenRequest request) {
-        if (!tokenProvider.validateToken(request.getRefreshToken())) {
+        return refreshToken(request.getRefreshToken());
+    }
+
+    @Transactional(readOnly = true)
+    public AuthResponse refreshToken(String rawRefreshToken) {
+        if (rawRefreshToken == null || !tokenProvider.validateToken(rawRefreshToken)) {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
 
-        String email = tokenProvider.getUsernameFromToken(request.getRefreshToken());
+        String email = tokenProvider.getUsernameFromToken(rawRefreshToken);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found for token"));
 
@@ -109,6 +116,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
+                .expiresIn(tokenProvider.getJwtExpirationMs())
                 .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
