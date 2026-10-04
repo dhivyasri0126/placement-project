@@ -10,6 +10,48 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Reserves scrollbar gutter space to prevent horizontal UI shift on route navigation */
+  scrollbar-gutter: stable;
+}
+
+/* ==========================================================================
+   Custom Scrollbar & Layout Shift Elimination (WCAG & Modern Standards)
+   ========================================================================== */
+
+/* Modern W3C standard (Firefox, Chrome 121+, modern Safari) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-bg, #D4D4D8) var(--scrollbar-track-bg, transparent);
+}
+
+/* WebKit / Chromium browsers (Chrome, Edge, Safari, Brave, Electron) */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width, 8px);
+  height: var(--scrollbar-width, 8px);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg, transparent);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-bg, #D4D4D8);
+  border-radius: var(--scrollbar-radius, 999px);
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background-color 0.15s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-bg, #A1A1AA);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--scrollbar-thumb-active-bg, #71717A);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 html, body, #root {

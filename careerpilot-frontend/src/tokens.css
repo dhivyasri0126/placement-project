@@ -267,5 +267,15 @@
   --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ==========================================================================
+     10. CUSTOM SCROLLBAR TOKENS (Layout Stability & Minimal Aesthetics)
+     ========================================================================== */
+  --scrollbar-width: 8px;
+  --scrollbar-track-bg: transparent;
+  --scrollbar-thumb-bg: var(--color-neutral-300, #D4D4D8);
+  --scrollbar-thumb-hover-bg: var(--color-neutral-400, #A1A1AA);
+  --scrollbar-thumb-active-bg: var(--color-neutral-500, #71717A);
+  --scrollbar-radius: var(--radius-full, 999px);
 }
 
