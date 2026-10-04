@@ -1,0 +1,22 @@
+{
+  "name": "careerpilot",
+  "private": true,
+  "version": "1.0.0",
+  "description": "CareerPilot - AI-Powered Placement Preparation Platform",
+  "scripts": {
+    "dev": "dotenv -c -- concurrently -k --names \"backend,frontend\" --prefix-colors \"magenta.bold,cyan.bold\" \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
+    "dev:frontend": "dotenv -c -- pnpm --prefix careerpilot-frontend run dev",
+    "dev:backend": "dotenv -c -- bash -c 'cd careerpilot-backend && ./mvnw spring-boot:run'",
+    "build": "pnpm run build:backend && pnpm run build:frontend",
+    "build:frontend": "pnpm --prefix careerpilot-frontend run build",
+    "build:backend": "cd careerpilot-backend && ./mvnw clean package -DskipTests",
+    "lint:frontend": "pnpm --prefix careerpilot-frontend run lint",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "dotenv-cli": "^11.0.0"
+  }
+}

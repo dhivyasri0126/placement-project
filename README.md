@@ -38,3 +38,23 @@ specification and ExecPlan are approved/consistent.
 
 The existing backend is preserved unless a documented migration is required.
 No dependency is introduced without a compatibility/support review.
+
+## Development Quick Start
+
+Run both Spring Boot backend (port 8080) and Vite React frontend (port 5173) concurrently from the project root:
+
+```bash
+# 1. Start PostgreSQL
+pnpm run db:up
+
+# 2. Concurrently run Backend & Frontend
+pnpm run dev
+# or alternatively via the standalone script:
+./scripts/dev.sh
+```
+
+Individual service commands:
+- `pnpm run dev:frontend` — Run Vite dev server only
+- `pnpm run dev:backend` — Run Spring Boot backend only
+- `pnpm run build` — Build backend jar and frontend bundle
+- `pnpm run db:down` — Stop PostgreSQL container
