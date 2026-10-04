@@ -223,7 +223,7 @@ export const ResumeAnalysisPage: React.FC = () => {
   }
 
   return (
-    <div style={{ maxWidth: '1240px', margin: '2rem auto', padding: '0 1.5rem 4rem 1.5rem' }}>
+    <div className="cp-container" style={{ margin: '1.5rem auto 3.5rem auto' }}>
       {/* Top Breadcrumb & Page Header */}
       <div
         style={{
@@ -232,7 +232,7 @@ export const ResumeAnalysisPage: React.FC = () => {
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '1rem',
-          marginBottom: '2rem',
+          marginBottom: '1.5rem',
         }}
       >
         <div>
@@ -241,7 +241,7 @@ export const ResumeAnalysisPage: React.FC = () => {
           </span>
           <h1
             style={{
-              fontSize: '1.875rem',
+              fontSize: 'clamp(1.5rem, 3.5vw, 1.875rem)',
               fontWeight: 700,
               color: 'var(--color-neutral-900, #18181B)',
               letterSpacing: '-0.02em',
@@ -253,47 +253,53 @@ export const ResumeAnalysisPage: React.FC = () => {
         </div>
 
         {/* Top Header Actions */}
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div className="cp-btn-group-mobile-stack" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <button
             onClick={() => setShowUploadModal(true)}
+            className="cp-btn-mobile-full"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.625rem 1.125rem',
+              justifyContent: 'center',
+              gap: '0.4rem',
+              padding: '0.45rem 0.9rem',
+              minHeight: '38px',
               backgroundColor: 'var(--surface-main, #FFFFFF)',
               color: 'var(--color-neutral-700, #3F3F46)',
               border: '1px solid var(--surface-divider, #E5E7EB)',
               borderRadius: 'var(--radius-md, 6px)',
               fontWeight: 500,
-              fontSize: '0.875rem',
+              fontSize: '0.8125rem',
               cursor: 'pointer',
               boxShadow: 'var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.05))',
             }}
           >
-            <Upload size={16} />
+            <Upload size={15} />
             Re-upload
           </button>
 
           <button
             onClick={handleDownload}
             disabled={!resume || downloading}
+            className="cp-btn-mobile-full"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.625rem 1.25rem',
+              justifyContent: 'center',
+              gap: '0.4rem',
+              padding: '0.45rem 1rem',
+              minHeight: '38px',
               backgroundColor: resume ? 'var(--color-primary-500, #2563EB)' : 'var(--color-neutral-300, #D4D4D8)',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: 'var(--radius-md, 6px)',
               fontWeight: 600,
-              fontSize: '0.875rem',
+              fontSize: '0.8125rem',
               cursor: resume && !downloading ? 'pointer' : 'not-allowed',
-              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)',
+              boxShadow: '0 1px 3px rgba(37, 99, 235, 0.2)',
             }}
           >
-            <Download size={16} />
+            <Download size={15} />
             {downloading ? 'Downloading...' : 'Download Report'}
           </button>
         </div>
@@ -316,29 +322,28 @@ export const ResumeAnalysisPage: React.FC = () => {
             zIndex: 100,
             padding: '1rem',
           }}
+          onClick={() => setShowUploadModal(false)}
         >
           <div
-            style={{
-              backgroundColor: 'var(--surface-main, #FFFFFF)',
-              borderRadius: 'var(--radius-xl, 12px)',
-              maxWidth: '560px',
-              width: '100%',
-              padding: '1.75rem',
-              boxShadow: 'var(--shadow-xl, 0 20px 25px rgba(0,0,0,0.15))',
-              position: 'relative',
-            }}
+            className="cp-modal-dialog"
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setShowUploadModal(false)}
               aria-label="Close modal"
               style={{
                 position: 'absolute',
-                top: '1.25rem',
-                right: '1.25rem',
+                top: '1rem',
+                right: '1rem',
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 color: 'var(--color-neutral-400, #A1A1AA)',
+                minWidth: '44px',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <X size={20} />
@@ -378,22 +383,15 @@ export const ResumeAnalysisPage: React.FC = () => {
         </div>
       )}
 
-      {/* Top 2 Cards Row (Directly from Mockup Screen 3) */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '1.5rem',
-          marginBottom: '2rem',
-        }}
-      >
+      {/* Top 2 Cards Row */}
+      <div className="cp-grid-2col" style={{ marginBottom: '1.5rem' }}>
         {/* Card 1: Overall Resume Score */}
         <div
           style={{
             backgroundColor: 'var(--surface-card, #FFFFFF)',
             borderRadius: 'var(--radius-xl, 12px)',
             border: '1px solid var(--surface-divider, #E5E7EB)',
-            padding: '1.75rem',
+            padding: '1.25rem',
             boxShadow: 'var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.05))',
             display: 'flex',
             flexDirection: 'column',
@@ -401,7 +399,7 @@ export const ResumeAnalysisPage: React.FC = () => {
           }}
         >
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <h2 style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0, color: 'var(--color-neutral-900, #18181B)' }}>
                 Overall Resume Score
               </h2>
@@ -420,19 +418,19 @@ export const ResumeAnalysisPage: React.FC = () => {
               </span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.75rem' }}>
               <span
                 style={{
-                  fontSize: '3.5rem',
+                  fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)',
                   fontWeight: 800,
                   color: 'var(--color-success-500, #10B981)',
                   lineHeight: 1,
-                  letterSpacing: '-0.03em',
+                  letterSpacing: '-0.02em',
                 }}
               >
                 82%
               </span>
-              <span style={{ fontSize: '0.875rem', color: 'var(--color-neutral-500, #71717A)', fontWeight: 500 }}>
+              <span style={{ fontSize: '0.8125rem', color: 'var(--color-neutral-500, #71717A)', fontWeight: 500 }}>
                 / 100 ATS Readiness
               </span>
             </div>
@@ -458,7 +456,7 @@ export const ResumeAnalysisPage: React.FC = () => {
               />
             </div>
 
-            <p style={{ margin: 0, fontSize: '0.9375rem', color: 'var(--color-neutral-600, #52525B)', lineHeight: 1.5 }}>
+            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-neutral-600, #52525B)', lineHeight: 1.5 }}>
               Good resume. A few targeted improvements will strengthen ATS matching and technical impact.
             </p>
           </div>
@@ -467,23 +465,23 @@ export const ResumeAnalysisPage: React.FC = () => {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '0.75rem',
-              marginTop: '1.5rem',
-              paddingTop: '1.25rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
+              gap: '0.5rem',
+              marginTop: '1.25rem',
+              paddingTop: '1rem',
               borderTop: '1px solid var(--surface-divider, #E5E7EB)',
             }}
           >
             <div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-neutral-500, #71717A)' }}>Format & ATS</div>
+              <div style={{ fontSize: '0.6875rem', color: 'var(--color-neutral-500, #71717A)' }}>Format & ATS</div>
               <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-neutral-900, #18181B)' }}>85%</div>
             </div>
             <div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-neutral-500, #71717A)' }}>Role Keywords</div>
+              <div style={{ fontSize: '0.6875rem', color: 'var(--color-neutral-500, #71717A)' }}>Role Keywords</div>
               <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-neutral-900, #18181B)' }}>80%</div>
             </div>
             <div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-neutral-500, #71717A)' }}>Project Depth</div>
+              <div style={{ fontSize: '0.6875rem', color: 'var(--color-neutral-500, #71717A)' }}>Project Depth</div>
               <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-neutral-900, #18181B)' }}>82%</div>
             </div>
           </div>
@@ -495,7 +493,7 @@ export const ResumeAnalysisPage: React.FC = () => {
             backgroundColor: 'var(--surface-card, #FFFFFF)',
             borderRadius: 'var(--radius-xl, 12px)',
             border: '1px solid var(--surface-divider, #E5E7EB)',
-            padding: '1.75rem',
+            padding: '1.25rem',
             boxShadow: 'var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.05))',
             display: 'flex',
             flexDirection: 'column',
@@ -595,16 +593,14 @@ export const ResumeAnalysisPage: React.FC = () => {
           overflow: 'hidden',
         }}
       >
-        {/* Tab Headers */}
+        {/* Tab Headers with Mobile Smooth Horizontal Scroll */}
         <div
           role="tablist"
+          className="cp-tabs-scrollable"
           style={{
-            display: 'flex',
             borderBottom: '1px solid var(--surface-divider, #E5E7EB)',
             backgroundColor: 'var(--surface-app-bg, #F8FAFC)',
             padding: '0.5rem 1rem 0 1rem',
-            gap: '0.5rem',
-            overflowX: 'auto',
           }}
         >
           {[
@@ -621,8 +617,9 @@ export const ResumeAnalysisPage: React.FC = () => {
                 aria-selected={isActive}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 style={{
-                  padding: '0.75rem 1.25rem',
-                  fontSize: '0.875rem',
+                  padding: '0.5rem 1rem',
+                  minHeight: '38px',
+                  fontSize: '0.8125rem',
                   fontWeight: isActive ? 600 : 500,
                   color: isActive ? '#FFFFFF' : 'var(--color-neutral-600, #52525B)',
                   backgroundColor: isActive ? 'var(--color-primary-500, #2563EB)' : 'transparent',
@@ -631,6 +628,7 @@ export const ResumeAnalysisPage: React.FC = () => {
                   cursor: 'pointer',
                   transition: 'all 0.15s ease-in-out',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 {tab.label}
@@ -640,7 +638,7 @@ export const ResumeAnalysisPage: React.FC = () => {
         </div>
 
         {/* Tab Content Body */}
-        <div style={{ padding: '2rem' }}>
+        <div style={{ padding: 'clamp(1rem, 3vw, 2rem)' }}>
           {/* TAB 1: Extracted Information */}
           {activeTab === 'extracted' && (
             <div>
@@ -670,13 +668,7 @@ export const ResumeAnalysisPage: React.FC = () => {
                 </div>
               )}
 
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                  gap: '2rem',
-                }}
-              >
+              <div className="cp-grid-3col">
                 {/* Column 1: Personal Information */}
                 <div>
                   <h3
@@ -844,7 +836,7 @@ export const ResumeAnalysisPage: React.FC = () => {
                 Comparing demonstrated skills against backend engineering & full-stack placement benchmarks.
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+              <div className="cp-grid-2col">
                 {[
                   { domain: 'Core Computer Science', score: 85, skills: ['DSA', 'Problem Solving', 'OOP Concepts'] },
                   { domain: 'Backend Engineering', score: 80, skills: ['Java', 'Spring Boot', 'REST APIs', 'SQL'] },
@@ -966,7 +958,7 @@ export const ResumeAnalysisPage: React.FC = () => {
                 Alignment calculated by matching resume skills with verified industry hiring requirements.
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+              <div className="cp-grid-3col">
                 {matchedRoles.map((role) => (
                   <div
                     key={role.company + role.role}
@@ -1029,7 +1021,8 @@ export const ResumeAnalysisPage: React.FC = () => {
                     <button
                       style={{
                         marginTop: '1.25rem',
-                        padding: '0.5rem 1rem',
+                        padding: '0.625rem 1rem',
+                        minHeight: '44px',
                         backgroundColor: 'var(--color-primary-50, #EEF4FF)',
                         color: 'var(--color-primary-700, #1E40AF)',
                         border: '1px solid var(--color-primary-100, #D9E6FF)',
@@ -1038,6 +1031,9 @@ export const ResumeAnalysisPage: React.FC = () => {
                         fontSize: '0.8125rem',
                         cursor: 'pointer',
                         width: '100%',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
                       View Role Benchmark

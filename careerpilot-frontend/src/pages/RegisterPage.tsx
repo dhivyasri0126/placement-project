@@ -42,20 +42,21 @@ export const RegisterPage: React.FC = () => {
 
   return (
     <div
+      className="cp-container"
       style={{
-        maxWidth: '440px',
-        margin: '3rem auto',
-        padding: '2.5rem',
+        maxWidth: '460px',
+        margin: 'clamp(1.5rem, 5vw, 3rem) auto',
+        padding: 'clamp(1.25rem, 4vw, 2.25rem)',
         backgroundColor: 'var(--surface-card, #FFFFFF)',
         border: '1px solid var(--surface-divider, #E5E7EB)',
         borderRadius: 'var(--radius-lg, 8px)',
         boxShadow: 'var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.07))',
       }}
     >
-      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+      <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
         <h1
           style={{
-            fontSize: '1.5rem',
+            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
             fontWeight: 700,
             color: 'var(--color-neutral-900, #18181B)',
             margin: '0 0 0.5rem 0',
@@ -158,13 +159,14 @@ export const RegisterPage: React.FC = () => {
           style={{
             width: '100%',
             padding: '0.75rem 1rem',
+            minHeight: '44px',
             backgroundColor: isSubmitting
               ? 'var(--btn-primary-disabled-bg, #D9E6FF)'
               : 'var(--btn-primary-bg, #2563EB)',
             color: '#FFFFFF',
             border: 'none',
             borderRadius: 'var(--radius-md, 6px)',
-            fontSize: '0.875rem',
+            fontSize: '1rem',
             fontWeight: 600,
             cursor: isSubmitting ? 'not-allowed' : 'pointer',
             marginTop: '0.5rem',

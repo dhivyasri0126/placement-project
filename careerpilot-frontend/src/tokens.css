@@ -232,4 +232,40 @@
   /* Icon Tokens */
   --icon-stroke-width: 2px;
   --icon-size-md: 24px;
+
+  /* ==========================================================================
+     9. ACCESSIBILITY, TOUCH & RESPONSIVE TOKENS (Apple HIG / NN/g / WCAG)
+     ========================================================================== */
+  --touch-target-min: 38px;
+  --btn-height-sm: 32px;
+  --btn-height-md: 38px;
+  --btn-height-lg: 42px;
+  --input-height: 38px;
+
+  /* Refined UI Typography Tokens */
+  --font-ui-xs: 11px;
+  --font-ui-sm: 12px;
+  --font-ui-base: 13.5px;
+  --font-ui-md: 14.5px;
+  --font-ui-lg: 16px;
+
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-primary-500);
+
+  /* Responsive Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+
+  /* DesignMotionHQ Motion Scale */
+  --motion-duration-micro: 100ms;
+  --motion-duration-sm: 200ms;
+  --motion-duration-md: 300ms;
+  --motion-duration-lg: 400ms;
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
 }
+

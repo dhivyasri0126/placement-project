@@ -137,10 +137,11 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <div
+      className="cp-container"
       style={{
-        maxWidth: '640px',
-        margin: '2rem auto 4rem auto',
-        padding: '2rem',
+        maxWidth: '680px',
+        margin: '1.5rem auto 3.5rem auto',
+        padding: '1.25rem',
         backgroundColor: 'var(--surface-card, #FFFFFF)',
         border: '1px solid var(--surface-divider, #E5E7EB)',
         borderRadius: 'var(--radius-lg, 8px)',
@@ -148,7 +149,7 @@ export const ProfilePage: React.FC = () => {
       }}
     >
       <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--surface-divider, #E5E7EB)', paddingBottom: '1rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'var(--color-neutral-900, #18181B)' }}>
+        <h1 style={{ fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', fontWeight: 700, margin: 0, color: 'var(--color-neutral-900, #18181B)' }}>
           Student Profile & Target Company
         </h1>
         <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: 'var(--color-neutral-600, #52525B)' }}>
@@ -183,10 +184,8 @@ export const ProfilePage: React.FC = () => {
 
       {/* Read-Only Account Identity Info */}
       <div
+        className="cp-grid-2col"
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '1rem',
           marginBottom: '1.5rem',
           padding: '1rem',
           backgroundColor: 'var(--color-neutral-50, #FAFAFA)',
@@ -212,7 +211,7 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Editable Form with Zod + React Hook Form (noValidate disables browser popups, zero native required) */}
+      {/* Editable Form with Zod + React Hook Form */}
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <FormField
           label="Target Company"
@@ -234,7 +233,7 @@ export const ProfilePage: React.FC = () => {
           </Select>
         </FormField>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+        <div className="cp-grid-2col">
           <FormField
             label="College / Institution"
             htmlFor="profile-college"
@@ -264,7 +263,7 @@ export const ProfilePage: React.FC = () => {
           </FormField>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem' }}>
+        <div className="cp-grid-3col">
           <FormField
             label="CGPA (out of 10.0)"
             htmlFor="profile-cgpa"
@@ -333,6 +332,7 @@ export const ProfilePage: React.FC = () => {
           style={{
             width: '100%',
             padding: '0.75rem 1.25rem',
+            minHeight: '44px',
             backgroundColor: isSubmitting
               ? 'var(--btn-primary-disabled-bg, #D9E6FF)'
               : 'var(--btn-primary-bg, #2563EB)',
@@ -340,7 +340,7 @@ export const ProfilePage: React.FC = () => {
             border: 'none',
             borderRadius: 'var(--radius-md, 6px)',
             fontWeight: 600,
-            fontSize: '0.875rem',
+            fontSize: '1rem',
             cursor: isSubmitting ? 'not-allowed' : 'pointer',
             transition: 'background-color 0.15s ease-in-out',
             marginTop: '0.5rem',

@@ -1,0 +1,247 @@
+/* CareerPilot Responsive & Mobile-First Component Styles */
+
+/* Base Responsive Container */
+.cp-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .cp-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Touch Target Standard (DesignMotionHQ & Web Guidelines: min 44x44px) */
+.cp-touch-target {
+  min-height: var(--touch-target-min, 44px);
+  min-width: var(--touch-target-min, 44px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Button Mobile Stacking */
+@media (max-width: 639px) {
+  .cp-btn-mobile-full {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  .cp-btn-group-mobile-stack {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+}
+
+/* Responsive Grid Systems */
+.cp-grid-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .cp-grid-hero {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3.5rem;
+  }
+}
+
+.cp-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .cp-grid-2col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.cp-grid-3col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .cp-grid-3col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cp-grid-3col {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.cp-grid-4col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .cp-grid-4col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cp-grid-4col {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Preparation Loop Step Timeline */
+.cp-loop-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .cp-loop-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cp-loop-container {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Navbar Responsive Classes */
+.cp-navbar-desktop-nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .cp-navbar-desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.cp-navbar-mobile-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--surface-divider, #E5E7EB);
+  border-radius: var(--radius-md, 6px);
+  color: var(--color-neutral-800, #27272A);
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .cp-navbar-mobile-toggle {
+    display: none;
+  }
+}
+
+/* Mobile Navigation Overlay / Dropdown (Apple HIG / NN/g Standards) */
+.cp-mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0.5rem 1rem;
+  animation: cpFadeIn 150ms ease-out;
+}
+
+.cp-mobile-drawer-content {
+  background-color: var(--surface-main, #FFFFFF);
+  width: 100%;
+  max-width: 320px;
+  margin-top: 3.25rem;
+  border-radius: var(--radius-xl, 12px);
+  border: 1px solid var(--surface-divider, #E5E7EB);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 0.75rem;
+  max-height: calc(100vh - 4.5rem);
+  overflow-y: auto;
+  animation: cpSlideDown 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cpFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cpSlideDown {
+  from {
+    transform: translateY(-8px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Horizontal Scrollable Tabs on Mobile */
+.cp-tabs-scrollable {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  gap: 0.5rem;
+  padding-bottom: 2px;
+}
+
+.cp-tabs-scrollable::-webkit-scrollbar {
+  height: 4px;
+}
+
+.cp-tabs-scrollable::-webkit-scrollbar-thumb {
+  background-color: var(--surface-divider, #E5E7EB);
+  border-radius: 4px;
+}
+
+/* Responsive Modal Dialog */
+.cp-modal-dialog {
+  background-color: var(--surface-main, #FFFFFF);
+  border-radius: var(--radius-xl, 12px);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xl, 0 20px 25px rgba(0,0,0,0.15));
+  position: relative;
+  margin: 1rem;
+}
+
+@media (min-width: 640px) {
+  .cp-modal-dialog {
+    padding: 2rem;
+  }
+}

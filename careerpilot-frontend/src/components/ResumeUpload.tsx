@@ -65,7 +65,7 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ onUploadSuccess }) =
   return (
     <div
       style={{
-        padding: '1.75rem',
+        padding: 'clamp(1.25rem, 3vw, 1.75rem)',
         border: '1px dashed var(--surface-divider, #CBD5E1)',
         borderRadius: 'var(--radius-lg, 8px)',
         backgroundColor: 'var(--color-neutral-50, #FAFAFA)',
@@ -155,6 +155,7 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ onUploadSuccess }) =
             style={{
               display: 'block',
               margin: '0 auto',
+              maxWidth: '100%',
               fontSize: '0.875rem',
               color: 'var(--color-neutral-700, #3F3F46)',
             }}
@@ -171,8 +172,13 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ onUploadSuccess }) =
         <button
           type="submit"
           disabled={isSubmitting}
+          className="cp-btn-mobile-full"
           style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: '0.625rem 1.5rem',
+            minHeight: '44px',
             backgroundColor: isSubmitting
               ? 'var(--btn-primary-disabled-bg, #D9E6FF)'
               : 'var(--btn-primary-bg, #2563EB)',

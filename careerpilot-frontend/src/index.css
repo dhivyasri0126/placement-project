@@ -6,6 +6,12 @@
   padding: 0;
 }
 
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 html, body, #root {
   width: 100%;
   min-height: 100vh;
@@ -16,4 +22,41 @@ html, body, #root {
   color: var(--color-neutral-900, #18181B);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Accessible focus ring for keyboard navigation */
+:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, #2563EB);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+/* Touch targets: interactive buttons, links, controls */
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+/* Prevent iOS Safari 16px input zoom while keeping desktop typography */
+@media screen and (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 1rem !important; /* 16px minimum prevents iOS zoom */
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

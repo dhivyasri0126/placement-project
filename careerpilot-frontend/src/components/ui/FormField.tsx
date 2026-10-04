@@ -97,9 +97,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         aria-invalid={hasError ? 'true' : undefined}
         style={{
           width: '100%',
-          padding: '0.625rem 0.75rem',
-          fontSize: '0.875rem',
-          lineHeight: '1.25rem',
+          minHeight: 'var(--input-height, 38px)',
+          padding: '0.5rem 0.75rem',
+          fontSize: '0.9375rem',
+          lineHeight: '1.4',
           color: 'var(--color-neutral-900, #18181B)',
           backgroundColor: props.disabled
             ? 'var(--input-bg-disabled, #F4F4F5)'
@@ -133,9 +134,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         aria-invalid={hasError ? 'true' : undefined}
         style={{
           width: '100%',
-          padding: '0.625rem 0.75rem',
-          fontSize: '0.875rem',
-          lineHeight: '1.25rem',
+          minHeight: 'var(--input-height, 38px)',
+          padding: '0.5rem 0.75rem',
+          fontSize: '0.9375rem',
+          lineHeight: '1.4',
           color: 'var(--color-neutral-900, #18181B)',
           backgroundColor: props.disabled
             ? 'var(--input-bg-disabled, #F4F4F5)'
@@ -146,6 +148,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           borderRadius: 'var(--radius-md, 6px)',
           outline: 'none',
           boxSizing: 'border-box',
+          cursor: 'pointer',
           ...style,
         }}
         {...props}
@@ -171,9 +174,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         aria-invalid={hasError ? 'true' : undefined}
         style={{
           width: '100%',
-          padding: '0.625rem 0.75rem',
-          fontSize: '0.875rem',
-          lineHeight: '1.25rem',
+          minHeight: '96px',
+          padding: '0.625rem 0.875rem',
+          fontSize: '1rem',
+          lineHeight: '1.5rem',
           color: 'var(--color-neutral-900, #18181B)',
           backgroundColor: props.disabled
             ? 'var(--input-bg-disabled, #F4F4F5)'
